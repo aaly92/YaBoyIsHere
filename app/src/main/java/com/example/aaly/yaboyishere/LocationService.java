@@ -30,8 +30,7 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Location pointLocation = intent.getExtras().getParcelable("location");
-        this.pointLocation = pointLocation;
+        this.pointLocation = intent.getExtras().getParcelable("location");
         addProximityAlert();
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
