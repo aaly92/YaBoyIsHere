@@ -80,11 +80,14 @@ public class LocationAlertActivity extends AppCompatActivity {
             } else {
                 location =
                         locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            }
-            if (location == null) {
-                Toast.makeText(this, "No last known location. Aborting...",
-                        Toast.LENGTH_LONG).show();
-                return;
+                if (location == null) {
+                    Toast.makeText(this, "No last known location. Aborting...",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                } else {
+                    latitudeEditText.setText(nf.format(location.getLatitude()));
+                    longitudeEditText.setText(nf.format(location.getLongitude()));
+                }
             }
 
             Intent intent = new Intent(LocationAlertActivity.this, LocationService.class);
