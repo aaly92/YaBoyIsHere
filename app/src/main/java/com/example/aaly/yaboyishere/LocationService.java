@@ -77,10 +77,10 @@ public class LocationService extends Service {
             float distance = location.distanceTo(pointLocation);
             SlackPost slackPost = null;
             if (distance <= POINT_RADIUS && !currentLocation.equals("INSIDE")) {
-                slackPost = new SlackPost("Hov's in the building", "HOVA", ":hova:");
+                slackPost = new SlackPost("I’m in the building and I’m feeling myself", "DRIZZY", ":drizzy:");
                 currentLocation = "INSIDE";
             } else if (distance > POINT_RADIUS && !currentLocation.equals("OUTSIDE")) {
-                slackPost = new SlackPost("Hov's out the building", "HOVA", ":hova:");
+                slackPost = new SlackPost("I'm leaving I'm gone", "DRIZZY", ":drizzy:");
                 currentLocation = "OUTSIDE";
             }
             if (slackPost != null) {
