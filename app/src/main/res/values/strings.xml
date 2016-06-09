@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">YaBoyIsHere</string>
+    <string name="insert_latitude_input">Insert latitude</string>
+    <string name="insert_longitude_input">Insert longitude</string>
+    <string name="populate_coordinates">Find Current Coordinates</string>
+    <string name="save_coordinates">Register Coordinates For Alerts</string>
 </resources>
