@@ -68,8 +68,19 @@ public class LocationAlertActivity extends AppCompatActivity {
     private void saveProximityAlertPoint() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Location location =
-                    locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            Location location;
+            String latitude = latitudeEditText.getText().toString();
+            String longitude = longitudeEditText.getText().toString();
+
+            if(!latitude.equals("") && !longitude.equals("") ){
+                location = new Location("UserInput");
+                location.setLatitude(Double.parseDouble(latitude));
+                location.setLongitude(Double.parseDouble(longitude));
+            } else {
+                location =
+                        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
             if (location == null) {
                 Toast.makeText(this, "No last known location. Aborting...",
                         Toast.LENGTH_LONG).show();
