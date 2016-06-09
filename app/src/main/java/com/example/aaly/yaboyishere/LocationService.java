@@ -35,7 +35,6 @@ public class LocationService extends Service {
     private Location pointLocation;
 
 
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.pointLocation = intent.getExtras().getParcelable("location");
@@ -80,16 +79,17 @@ public class LocationService extends Service {
             if (distance <= POINT_RADIUS && !currentLocation.equals("INSIDE")) {
                 slackPost = new SlackPost("Hov's in the building");
                 currentLocation = "INSIDE";
-            } else if( distance > POINT_RADIUS && !currentLocation.equals("OUTSIDE") ){
+            } else if (distance > POINT_RADIUS && !currentLocation.equals("OUTSIDE")) {
                 slackPost = new SlackPost("Hov's out the building");
                 currentLocation = "OUTSIDE";
             }
-            if(slackPost != null){
+            if (slackPost != null) {
                 SlackPostAPI.Factory.getInstance().postToSlack(slackPost).enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         Log.e("Response", response.toString());
                     }
+
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
                         Log.e("Failed", t.getMessage());
