@@ -69,10 +69,10 @@ public class LocationService extends Service {
     public class MyLocationListener implements LocationListener {
         public void onLocationChanged(Location location) {
             float distance = location.distanceTo(pointLocation);
-            if(distance <=  POINT_RADIUS) {
-                Log.v("INSIDE","Proximity Alert Intent Received");
+            if (distance <= POINT_RADIUS) {
+                Log.v("INSIDE", "Proximity Alert Intent Received");
             } else {
-                Log.v("OUTSIDE","Proximity Alert Intent Received");
+                Log.v("OUTSIDE", "Proximity Alert Intent Received");
             }
         }
 
