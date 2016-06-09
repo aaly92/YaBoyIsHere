@@ -13,6 +13,12 @@ import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.example.aaly.yaboyishere.data.remote.SlackPostAPI;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LocationService extends Service {
 
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATE = 1; // meters
@@ -25,7 +31,9 @@ public class LocationService extends Service {
 
     private static final String PROX_ALERT_INTENT = "PROX_INTENT";
 
+    private String currentLocation = "";
     private Location pointLocation;
+
 
 
     @Override
@@ -68,10 +76,25 @@ public class LocationService extends Service {
     public class MyLocationListener implements LocationListener {
         public void onLocationChanged(Location location) {
             float distance = location.distanceTo(pointLocation);
-            if (distance <= POINT_RADIUS) {
-                Log.v("INSIDE", "Proximity Alert Intent Received");
-            } else {
-                Log.v("OUTSIDE", "Proximity Alert Intent Received");
+            SlackPost slackPost = null;
+            if (distance <= POINT_RADIUS && !currentLocation.equals("INSIDE")) {
+                slackPost = new SlackPost("Hov's in the building");
+                currentLocation = "INSIDE";
+            } else if( distance > POINT_RADIUS && !currentLocation.equals("OUTSIDE") ){
+                slackPost = new SlackPost("Hov's out the building");
+                currentLocation = "OUTSIDE";
+            }
+            if(slackPost != null){
+                SlackPostAPI.Factory.getInstance().postToSlack(slackPost).enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        Log.e("Response", response.toString());
+                    }
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.e("Failed", t.getMessage());
+                    }
+                });
             }
         }
 
