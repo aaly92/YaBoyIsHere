@@ -22,8 +22,6 @@ public class LocationAlertActivity extends AppCompatActivity {
 
     private EditText latitudeEditText;
     private EditText longitudeEditText;
-    private Button findCoordinatesButton;
-    private Button savePointButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +30,24 @@ public class LocationAlertActivity extends AppCompatActivity {
 
         latitudeEditText = (EditText) findViewById(R.id.point_latitude);
         longitudeEditText = (EditText) findViewById(R.id.point_longitude);
-        findCoordinatesButton = (Button) findViewById(R.id.find_coordinates_button);
-        savePointButton = (Button) findViewById(R.id.save_point_button);
-
-        findCoordinatesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                populateCoordinatesFromLastKnownLocation();
-            }
-        });
-
-        savePointButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveProximityAlertPoint();
-            }
-        });
+        Button findCoordinatesButton = (Button) findViewById(R.id.find_coordinates_button);
+        Button savePointButton = (Button) findViewById(R.id.save_point_button);
+        if (findCoordinatesButton != null) {
+            findCoordinatesButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    populateCoordinatesFromLastKnownLocation();
+                }
+            });
+        }
+        if (savePointButton != null) {
+            savePointButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveProximityAlertPoint();
+                }
+            });
+        }
     }
 
     private void populateCoordinatesFromLastKnownLocation() {
