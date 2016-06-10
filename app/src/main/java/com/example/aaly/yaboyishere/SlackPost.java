@@ -1,8 +1,5 @@
 package com.example.aaly.yaboyishere;
 
-/**
- * Created by aaly on 6/9/16.
- */
 public class SlackPost {
 
     private String text;
