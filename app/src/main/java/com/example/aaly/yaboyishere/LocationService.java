@@ -14,6 +14,8 @@ import android.util.Log;
 
 import com.example.aaly.yaboyishere.data.remote.SlackPostAPI;
 
+import java.net.HttpURLConnection;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,6 +25,9 @@ public class LocationService extends Service {
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATE = 1; // meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATE = 1000; // milliseconds
     private static final long POINT_RADIUS = 1000; // meters
+    private static final String LOCATION_EXTRA_FROM_INTENT = "Intent Location";
+
+    private LocationListener locationListener = new MyLocationListener();
 
 
     private Boolean isInside = null;
@@ -32,14 +37,14 @@ public class LocationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.isInside = null;
-        this.pointLocation = intent.getExtras().getParcelable("location");
+        this.pointLocation = intent.getExtras().getParcelable(LOCATION_EXTRA_FROM_INTENT);
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
                     MINIMUM_TIME_BETWEEN_UPDATE,
                     MINIMUM_DISTANCE_CHANGE_FOR_UPDATE,
-                    new MyLocationListener()
+                    locationListener
             );
         }
         return super.onStartCommand(intent, flags, startId);
@@ -65,7 +70,7 @@ public class LocationService extends Service {
                 SlackPostAPI.Factory.getInstance().postToSlack(slackPost).enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.code() == 200) {
+                        if (response.code() == HttpURLConnection.HTTP_OK) {
                             Log.d("Response", "SUCCESS");
                         } else {
                             Log.d("Error", response.message());
@@ -74,7 +79,7 @@ public class LocationService extends Service {
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        Log.e("Failed", t.getMessage());
+                        Log.e("Failed", "API failed", t);
                     }
                 });
             }

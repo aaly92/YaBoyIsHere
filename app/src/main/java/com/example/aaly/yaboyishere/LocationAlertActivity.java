@@ -18,10 +18,13 @@ import java.text.NumberFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LocationAlertActivity extends AppCompatActivity {
 
-    private static final NumberFormat nf = new DecimalFormat("##.########");
+    private static final NumberFormat NUMBER_FORMAT = new DecimalFormat("##.########");
+    private static final String LOCATION_EXTRA_FROM_INTENT = "Intent Location";
+
     @BindView(R.id.point_latitude)
     EditText latitudeEditText;
     @BindView(R.id.point_longitude)
@@ -31,28 +34,23 @@ public class LocationAlertActivity extends AppCompatActivity {
     @BindView(R.id.save_point_button)
     Button savePointButton;
 
+    @OnClick(R.id.find_coordinates_button)
+    public void findCoordinatesButton() {
+        populateCoordinatesFromLastKnownLocation();
+    }
+
+    @OnClick(R.id.save_point_button)
+    public void onSaveButtonClick() {
+        saveProximityAlertPoint();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         ButterKnife.bind(this);
-        if (findCoordinatesButton != null) {
-            findCoordinatesButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    populateCoordinatesFromLastKnownLocation();
-                }
-            });
-        }
-        if (savePointButton != null) {
-            savePointButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    saveProximityAlertPoint();
-                }
-            });
-        }
     }
+
 
     private void populateCoordinatesFromLastKnownLocation() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -60,8 +58,8 @@ public class LocationAlertActivity extends AppCompatActivity {
             Location location =
                     locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
-                latitudeEditText.setText(nf.format(location.getLatitude()));
-                longitudeEditText.setText(nf.format(location.getLongitude()));
+                latitudeEditText.setText(NUMBER_FORMAT.format(location.getLatitude()));
+                longitudeEditText.setText(NUMBER_FORMAT.format(location.getLongitude()));
             }
         }
     }
@@ -86,13 +84,13 @@ public class LocationAlertActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     return;
                 } else {
-                    latitudeEditText.setText(nf.format(location.getLatitude()));
-                    longitudeEditText.setText(nf.format(location.getLongitude()));
+                    latitudeEditText.setText(NUMBER_FORMAT.format(location.getLatitude()));
+                    longitudeEditText.setText(NUMBER_FORMAT.format(location.getLongitude()));
                 }
             }
 
             Intent intent = new Intent(LocationAlertActivity.this, LocationService.class);
-            intent.putExtra("location", location);
+            intent.putExtra(LOCATION_EXTRA_FROM_INTENT, location);
             startService(intent);
         }
     }
