@@ -16,22 +16,26 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LocationAlertActivity extends AppCompatActivity {
 
     private static final NumberFormat nf = new DecimalFormat("##.########");
-
+    @BindView(R.id.point_latitude)
     private EditText latitudeEditText;
+    @BindView(R.id.point_longitude)
     private EditText longitudeEditText;
+    @BindView(R.id.find_coordinates_button)
+    private Button findCoordinatesButton;
+    @BindView(R.id.save_point_button)
+    private Button savePointButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        latitudeEditText = (EditText) findViewById(R.id.point_latitude);
-        longitudeEditText = (EditText) findViewById(R.id.point_longitude);
-        Button findCoordinatesButton = (Button) findViewById(R.id.find_coordinates_button);
-        Button savePointButton = (Button) findViewById(R.id.save_point_button);
+        ButterKnife.bind(this);
         if (findCoordinatesButton != null) {
             findCoordinatesButton.setOnClickListener(new View.OnClickListener() {
                 @Override
