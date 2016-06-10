@@ -11,20 +11,4 @@ public class SlackPost {
         this.username = username;
         this.icon_emoji = iconEmoji;
     }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 }
