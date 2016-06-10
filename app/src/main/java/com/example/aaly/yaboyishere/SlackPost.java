@@ -1,7 +1,6 @@
 package com.example.aaly.yaboyishere;
 
 public class SlackPost {
-
     private String text;
     private String username;
     private String icon_emoji;

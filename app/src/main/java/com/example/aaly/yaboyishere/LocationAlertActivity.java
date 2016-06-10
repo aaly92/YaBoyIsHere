@@ -70,7 +70,7 @@ public class LocationAlertActivity extends AppCompatActivity {
             String latitude = latitudeEditText.getText().toString();
             String longitude = longitudeEditText.getText().toString();
 
-            if(!latitude.equals("") && !longitude.equals("") ){
+            if (!latitude.equals("") && !longitude.equals("")) {
                 location = new Location("UserInput");
                 location.setLatitude(Double.parseDouble(latitude));
                 location.setLongitude(Double.parseDouble(longitude));
