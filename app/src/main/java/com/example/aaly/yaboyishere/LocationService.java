@@ -23,6 +23,7 @@ public class LocationService extends Service {
 
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATE = 1; // meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATE = 1000; // milliseconds
+    private static final long POINT_RADIUS = 1000; // meters
     private static final long PROX_ALERT_EXPIRATION = -1; //never expires
 
     private static final String PROX_ALERT_INTENT = "PROX_INTENT";
