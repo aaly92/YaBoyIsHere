@@ -23,13 +23,13 @@ public class LocationAlertActivity extends AppCompatActivity {
 
     private static final NumberFormat nf = new DecimalFormat("##.########");
     @BindView(R.id.point_latitude)
-    private EditText latitudeEditText;
+    EditText latitudeEditText;
     @BindView(R.id.point_longitude)
-    private EditText longitudeEditText;
+    EditText longitudeEditText;
     @BindView(R.id.find_coordinates_button)
-    private Button findCoordinatesButton;
+    Button findCoordinatesButton;
     @BindView(R.id.save_point_button)
-    private Button savePointButton;
+    Button savePointButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

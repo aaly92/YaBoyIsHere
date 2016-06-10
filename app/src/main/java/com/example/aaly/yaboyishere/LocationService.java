@@ -52,8 +52,8 @@ public class LocationService extends Service {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(PROX_ALERT_INTENT);
             PendingIntent proximityIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-            LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locManager.addProximityAlert(
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationManager.addProximityAlert(
                     this.pointLocation.getLatitude(),
                     this.pointLocation.getLongitude(),
                     POINT_RADIUS,
