@@ -1,6 +1,5 @@
 package com.example.aaly.yaboyishere;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -24,9 +23,7 @@ public class LocationService extends Service {
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATE = 1; // meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATE = 1000; // milliseconds
     private static final long POINT_RADIUS = 1000; // meters
-    private static final long PROX_ALERT_EXPIRATION = -1; //never expires
 
-    private static final String PROX_ALERT_INTENT = "PROX_INTENT";
 
     private Boolean isInside = null;
     private Location pointLocation;
@@ -34,8 +31,8 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        this.isInside = null;
         this.pointLocation = intent.getExtras().getParcelable("location");
-        addProximityAlert();
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(
@@ -46,21 +43,6 @@ public class LocationService extends Service {
             );
         }
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    private void addProximityAlert() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(PROX_ALERT_INTENT);
-            PendingIntent proximityIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.addProximityAlert(
-                    this.pointLocation.getLatitude(),
-                    this.pointLocation.getLongitude(),
-                    POINT_RADIUS,
-                    PROX_ALERT_EXPIRATION,
-                    proximityIntent
-            );
-        }
     }
 
     @Override
@@ -83,7 +65,11 @@ public class LocationService extends Service {
                 SlackPostAPI.Factory.getInstance().postToSlack(slackPost).enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
-                        Log.e("Response", response.toString());
+                        if (response.code() == 200) {
+                            Log.d("Response", "SUCCESS");
+                        } else {
+                            Log.d("Error", response.message());
+                        }
                     }
 
                     @Override
