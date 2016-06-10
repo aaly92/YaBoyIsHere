@@ -23,15 +23,11 @@ public class LocationService extends Service {
 
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATE = 1; // meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATE = 1000; // milliseconds
-
-    private static final long POINT_RADIUS = 15; // meters
-
-    private static final long PROX_ALERT_EXPIRATION = -1;
-
+    private static final long PROX_ALERT_EXPIRATION = -1; //never expires
 
     private static final String PROX_ALERT_INTENT = "PROX_INTENT";
 
-    private String currentLocation = "";
+    private Boolean isInside = null;
     private Location pointLocation;
 
 
@@ -59,7 +55,6 @@ public class LocationService extends Service {
             locManager.addProximityAlert(
                     this.pointLocation.getLatitude(),
                     this.pointLocation.getLongitude(),
-
                     POINT_RADIUS,
                     PROX_ALERT_EXPIRATION,
                     proximityIntent
@@ -76,12 +71,12 @@ public class LocationService extends Service {
         public void onLocationChanged(Location location) {
             float distance = location.distanceTo(pointLocation);
             SlackPost slackPost = null;
-            if (distance <= POINT_RADIUS && !currentLocation.equals("INSIDE")) {
-                slackPost = new SlackPost("Work Work Work", "BAD_GYAL", ":badgyal:");
-                currentLocation = "INSIDE";
-            } else if (distance > POINT_RADIUS && !currentLocation.equals("OUTSIDE")) {
-                slackPost = new SlackPost("You need to get done done done at work", "BAD_GYAL", ":badgyal:");
-                currentLocation = "OUTSIDE";
+            if (distance <= POINT_RADIUS && (isInside == null || !isInside) ) {
+                slackPost = new SlackPost("I’m in the building and I’m feeling myself", "Drizzy", ":drizzy:");
+                isInside = true;
+            } else if (distance > POINT_RADIUS && ( isInside == null || isInside ) ) {
+                slackPost = new SlackPost("I'm leaving I'm gone", "Drizzy", ":drizzy:");
+                isInside = false;
             }
             if (slackPost != null) {
                 SlackPostAPI.Factory.getInstance().postToSlack(slackPost).enqueue(new Callback<Void>() {

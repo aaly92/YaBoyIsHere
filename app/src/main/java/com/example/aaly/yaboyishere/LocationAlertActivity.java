@@ -20,12 +20,10 @@ public class LocationAlertActivity extends AppCompatActivity {
 
     private static final NumberFormat nf = new DecimalFormat("##.########");
 
-
     private EditText latitudeEditText;
     private EditText longitudeEditText;
     private Button findCoordinatesButton;
     private Button savePointButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,6 @@ public class LocationAlertActivity extends AppCompatActivity {
                 longitudeEditText.setText(nf.format(location.getLongitude()));
             }
         }
-
     }
 
     private void saveProximityAlertPoint() {
